@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..models import DeviceReport,Devices
 from ..serializers import deviceReportSerializer, deviceReportViewSerializer
+from rest_framework.permissions import IsAuthenticated
+
 
 class DeviceReportList(APIView):
     def get(self, request):
@@ -11,7 +13,7 @@ class DeviceReportList(APIView):
         return Response(serializer.data)
 
 def currentTime():
-    curr_time = datetime.now(tz=None)
+    curr_time = datetime.now(tz=None).replace(microsecond=0)
     return curr_time
 
 def borrowOrReturn(request):
@@ -23,7 +25,8 @@ def borrowOrReturn(request):
         print('ret')
         return 'ret'
         
-class BorrowOrReturn(APIView):        
+class BorrowOrReturn(APIView):
+    permission_classes = [IsAuthenticated]        
     def post(self, request):
         devUpdate = Devices.objects.get(assetNo = request.data['assetNo'])
         print('dev',devUpdate)       

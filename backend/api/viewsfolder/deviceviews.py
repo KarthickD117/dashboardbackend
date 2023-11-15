@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..models import Devices
@@ -45,11 +45,3 @@ class DeviceDetail(APIView):
             return Response({'error': 'device not found'}, status=404)
         device.delete()
         return Response(status=204)
-    
-def try2(request):
-    if request.method == 'POST':
-        serializer = EmployeeSerializer(data=request.POST)
-        print('data is ',request.POST)
-        print(serializer.is_valid())
-        print(serializer.errors)
-    return JsonResponse('checking', safe=False)
