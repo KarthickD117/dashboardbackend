@@ -2,13 +2,18 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from ..models import Devices
+from rest_framework.permissions import IsAuthenticated
 from ..serializers import EmployeeSerializer, deviceSerializer
 
 class DeviceList(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
-        device = Devices.objects.all()
-        serializer = deviceSerializer(device, many=True)
-        return Response(serializer.data)
+        if request.user.has_perm('api.view_devices'):
+            device = Devices.objects.all().order_by('assetNo')
+            serializer = deviceSerializer(device, many=True)
+            return Response({'data':serializer.data, 'perm':request.user.has_perm('api.add_devices')})
+        else:
+            return Response('User doesnot have permission', status=403)
 
     def post(self, request):
         serializer = deviceSerializer(data=request.data)
