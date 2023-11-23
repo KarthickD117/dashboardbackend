@@ -19,30 +19,25 @@ def currentTime():
 def borrowOrReturn(request):
     print(request.path)
     if 'borrow' in request.path:
-        print('bor')
         return 'bor'
     elif 'return' in request.path:
-        print('ret')
         return 'ret'
         
 class BorrowOrReturn(APIView):
     permission_classes = [IsAuthenticated]        
     def post(self, request):
-        devUpdate = Devices.objects.get(assetNo = request.data['assetNo'])
-        print('dev',devUpdate)       
+        devUpdate = Devices.objects.get(assetNo = request.data['assetNo'])    
         if devUpdate.assetAvailability== 'Available' and borrowOrReturn(request) == 'bor':                      
             serializer = deviceReportSerializer(data= request.data)
             if serializer.is_valid():
                 serializer.save()
             dtUp = DeviceReport.objects.filter(ps_no = request.data['ps_no'],assetNo=request.data['assetNo']).last()
-            print(type(dtUp))
             dtUp.dateBorrowed = currentTime()
             dtUp.save()
             devUpdate.assetAvailability = 'Not Available'               
             devUpdate.save()      
             return Response('data is saved')
         elif devUpdate.assetAvailability== 'Not Available' and borrowOrReturn(request) == 'ret':
-            print('inside return')
             dtUp = DeviceReport.objects.filter(ps_no = request.data['ps_no'], assetNo=request.data['assetNo']).last()
             dtUp.dateReturned = currentTime()
             devUpdate.assetAvailability = 'Available'
@@ -50,9 +45,9 @@ class BorrowOrReturn(APIView):
             devUpdate.save() 
             return Response('data is saved')
         elif devUpdate.assetAvailability== 'Available' and borrowOrReturn(request) == 'ret':
-            return Response('you didnt borrow any device or you have entered wrong device number')           
+            return Response('You didnt borrow any device or you have entered wrong device number')           
         else:
-            return Response('the device is not available')
+            return Response('The device is not available')
 
 class DeviceReturn(APIView):
     def get(self, request):      
