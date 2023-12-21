@@ -22,7 +22,7 @@ class EmployeeList(APIView):
             serializer = EmployeeSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=201)
+                return Response('User added successfully', status=201)
             return Response(serializer.errors, status=400)
         else:
             return Response('User does not have permission',status=403)
@@ -54,7 +54,7 @@ class EmployeeDetail(APIView):
         except Employees.DoesNotExist:
             return Response({'error': 'Employee not found'}, status=404)
         employee.delete()
-        return Response(status=204)
+        return Response('user deleted successfully',status=204)
     
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer

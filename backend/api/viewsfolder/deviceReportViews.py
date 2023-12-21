@@ -27,7 +27,7 @@ class DeviceReportList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         if request.user.has_perm('api.view_devicereport'):
-            devicereport = DeviceReport.objects.select_related('ps_no').all().order_by('id')
+            devicereport = DeviceReport.objects.select_related('ps_no').all().order_by('-id')[:40]
             serializer = deviceReportViewSerializer(devicereport, many=True)
             return Response(serializer.data)
         else:
@@ -66,10 +66,15 @@ class BorrowOrReturn(APIView):
 class DeviceReturn(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        if request.user.has_perm('api.view_devicereport'):     
-            devicereports = DeviceReport.objects.filter(dateReturned__isnull =True).order_by('id')
-            serializer = deviceReportViewSerializer(devicereports, many=True)
-            return Response(serializer.data)
+        if request.user.has_perm('api.view_devicereport'):
+            if request.user.is_staff:     
+                devicereports = DeviceReport.objects.filter(dateReturned__isnull =True).order_by('id')
+                serializer = deviceReportViewSerializer(devicereports, many=True)
+                return Response(serializer.data)
+            else:
+                devicereports = DeviceReport.objects.filter(dateReturned__isnull =True, ps_no = request.user.username).order_by('id')
+                serializer = deviceReportViewSerializer(devicereports, many=True)
+                return Response(serializer.data)
         else:
             return Response('The user doesnot have access', status=403)
     

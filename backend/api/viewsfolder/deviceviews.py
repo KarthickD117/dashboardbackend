@@ -8,7 +8,7 @@ from ..serializers import EmployeeSerializer, deviceSerializer
 class DeviceList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        if request.user.has_perm('api.view_devices'):
+        if request.user:
             device = Devices.objects.all().order_by('assetNo')
             serializer = deviceSerializer(device, many=True)
             return Response({'data':serializer.data, 'perm':request.user.has_perm('api.add_devices')})
@@ -16,7 +16,7 @@ class DeviceList(APIView):
             return Response('User doesnot have permission', status=403)
 
     def post(self, request):
-        serializer = deviceSerializer(data=request.data)
+        serializer = deviceSerializer(data=request.data,many = True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)

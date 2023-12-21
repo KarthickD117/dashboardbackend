@@ -32,4 +32,5 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'username': self.user.username}) # type: ignore
         data.update({'firstname': self.user.first_name}) # type: ignore
         data.update({'isSuperUser': self.user.is_superuser}) # type: ignore
+        data.update({'isAdmin':self.user.is_staff})
         return data
