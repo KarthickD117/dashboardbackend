@@ -41,7 +41,6 @@ class EmployeeDetail(APIView):
             employee = Employees.objects.get(ps_no=ps_no)
         except Employees.DoesNotExist:
             return Response({'error': 'Employee not found'}, status=404)
-
         serializer = EmployeeSerializer(employee, data=request.data)
         if serializer.is_valid():
             serializer.save()

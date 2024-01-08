@@ -59,7 +59,7 @@ class BorrowOrReturn(APIView):
             elif devUpdate.assetAvailability== 'Available' and borrowOrReturn(request) == 'ret':
                 return Response('you didnt borrow any device or you have entered wrong device number')           
             else:
-                return Response('the device is not available')
+                return Response('The device is not available at the moment please try again later', status=503)
         else:
             return Response('The user doesnot have access', status=403)
 

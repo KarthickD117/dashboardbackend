@@ -34,3 +34,18 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'isSuperUser': self.user.is_superuser}) # type: ignore
         data.update({'isAdmin':self.user.is_staff})
         return data
+
+class RoasterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Roaster
+        fields = "__all__"
+
+class CalendarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Calendar
+        fields = ('id','title','date','end')
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tasks
+        fields = "__all__"

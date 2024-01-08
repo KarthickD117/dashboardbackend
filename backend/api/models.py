@@ -27,3 +27,25 @@ class DeviceReport(models.Model):
     assetNo = models.ForeignKey(Devices,on_delete=models.CASCADE)
     dateBorrowed = models.DateTimeField(null=True)
     dateReturned = models.DateTimeField(null= True)
+
+class Roaster(models.Model):
+    RoasterMonth = models.CharField(max_length=50)
+    RoasterPlan = models.JSONField(null=True)
+
+class Calendar(models.Model):
+    title = models.CharField(max_length=50)
+    date = models.CharField(max_length=20)
+    end = models.CharField(max_length = 20, null = True)
+
+class Tasks(models.Model):
+    ReleaseName = models.CharField(max_length = 50, primary_key = True)
+    Category = models.CharField(max_length = 20)
+    TestRail = models.CharField(max_length = 100)
+    TestRaidId = models.CharField(max_length= 20)
+    Build = models.CharField(max_length = 100)
+    DefectLink = models.CharField(max_length = 100)
+    Comment = models.JSONField(null = True)
+    TotalTC = models.IntegerField()
+    CurrentCount = models.JSONField(null = True)
+    Poc = models.CharField(null = True)
+    Status =models.CharField(max_length=15, null = True)
