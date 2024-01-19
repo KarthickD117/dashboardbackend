@@ -16,7 +16,7 @@ class DeviceList(APIView):
             return Response('User doesnot have permission', status=403)
 
     def post(self, request):
-        serializer = deviceSerializer(data=request.data,many = True)
+        serializer = deviceSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
