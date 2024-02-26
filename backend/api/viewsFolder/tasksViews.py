@@ -12,13 +12,11 @@ class TasksView(APIView):
 
     def post(self,request):
         serializer = TaskSerializer(data=request.data)
-        try:
-            print(serializer.Comment)
-        except:
-            pass
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer._errors)
+            return Response('Task saved successfully')
+        else:
+            return Response("An error Occured",status=400)
 class TasksUpdate(APIView):
     def post(self, request):
         try:

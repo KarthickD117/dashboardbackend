@@ -27,7 +27,7 @@ class DeviceReportList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         if request.user.has_perm('api.view_devicereport'):
-            devicereport = DeviceReport.objects.select_related('ps_no').all().order_by('-id')[:40]
+            devicereport = DeviceReport.objects.select_related('ps_no').all().order_by('-id')
             serializer = deviceReportViewSerializer(devicereport, many=True)
             return Response(serializer.data)
         else:
